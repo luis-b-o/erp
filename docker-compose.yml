@@ -1,0 +1,35 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: erp
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    image: node:20
+    container_name: app
+    working_dir: /usr/src/app
+    command: sh -c "cd /usr/src/app && npm install && npm run start:dev "
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
+      DATABASE_USER: user
+      DATABASE_PASSWORD: secret
+      DATABASE_NAME: erp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+
+volumes:
+  db_data:
