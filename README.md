@@ -1,73 +1,85 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJS + Prisma ERP Software
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a NodeJS application that uses Docker and Docker Compose to start a development environment.
+The technologies used in this project are the following:
+- NestJS v10 (with express)
+- MySQL v8
+- PrismaORM v5 (with Prisma Studio)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Getting Started
 
-## Description
+### Prerequisites
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-## Installation
+### Installation
 
-```bash
-$ npm install
+1. **Clone the repository**
+
+```
+git clone https://github.com/luis-b-o/erp
+cd erp
 ```
 
-## Running the app
+2. **Start the containers**
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```
+docker-compose up -d --build
 ```
 
-## Test
+This will spin up three containers:
+- `mysql`: Runs MySQL database.
+- `app`: Runs the NestJS application.
+- `prisma-studio`: Runs the Prisma Studio at `http://localhost:5555`
 
-```bash
-# unit tests
-$ npm run test
+### Accessing the Application
 
-# e2e tests
-$ npm run test:e2e
+The NestJS application will be available at `http://localhost:3000`.
 
-# test coverage
-$ npm run test:cov
+### Accessing the API Documentation
+This project uses SwaggerUI for documenting the API, the documentation will be available at `http://localhost:3000/api`.
+
+
+### Environment Variables
+
+The application uses the following environment variables for database configuration:
+
+- `DATABASE_URL`: Connection string of the database (default: `mysql://root:root@mysql:3306/erp`).
+
+
+### Stopping the Containers
+
+To stop the running containers, use:
+
+```
+docker-compose down
 ```
 
-## Support
+### Installing New Dependencies
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+1. To install a new dependency you need to run a terminal inside the `app` container, to do so, run this command at the root of the project:
 
-## Stay in touch
+```
+docker exec -it app sh
+```
+This will give you interactive access to the `app` container.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+2. Install the dependency inside the container:
+
+
+```
+npm install <some-dependency>
+```
+
+## Maintainers
+
+This project is currently maintained by:
+
+- [Bruno Stacheski](https://github.com/brunostc)
+- [Luis Oliveira](https://github.com/luis-b-o)
+
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the MIT License.
