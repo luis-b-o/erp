@@ -1,28 +1,18 @@
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
-import { UserService } from '@/services/user.service';
 import { CreateUserDto } from '@/dtos/create-user.dto';
 import { Response } from 'express';
+import { AuthService } from '@/services/auth.service';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('user')
+  @Post('api/register')
   async create(
     @Body() createUserDto: CreateUserDto,
     @Res() res: Response,
   ): Promise<any> {
-    const userAlreadyExists = await this.userService.user({
-      email: createUserDto.email,
-    });
-
-    if (userAlreadyExists) {
-      return res
-        .status(HttpStatus.CONFLICT)
-        .json({ message: 'Email already taken' });
-    }
-
-    const user = await this.userService.createUser(createUserDto);
+    const user = await this.authService.register(createUserDto);
 
     return res.status(HttpStatus.OK).json(user);
   }

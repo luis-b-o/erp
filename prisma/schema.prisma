@@ -7,7 +7,7 @@
 generator client {
   provider = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
-  previewFeatures = ["relationJoins"]
+  previewFeatures = ["relationJoins", "omitApi"]
 }
 
 datasource db {
@@ -15,20 +15,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
+model User {
   id        Int     @default(autoincrement()) @id
-  name      String?
+  name      String
   email     String  @unique
   password  String
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
 }
 
-model products {
+model Product {
   id            Int      @id @default(autoincrement())
   name          String
   description   String?
   sku           String?
   price         Int
-  stock_amount  Int
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  stockAmount   Int? @map("stock_amount")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("products")
 }
