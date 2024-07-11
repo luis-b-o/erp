@@ -30,5 +30,21 @@ services:
     depends_on:
       - mysql
 
+  prisma-studio:
+    container_name: prisma-studio
+    build:
+      context: .
+      dockerfile: prisma-studio.Dockerfile
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - "5555:5555"
+    volumes:
+      - ./prisma:/app/prisma
+    links:
+      - mysql
+    depends_on:
+      - mysql
+
 volumes:
   db_data:
