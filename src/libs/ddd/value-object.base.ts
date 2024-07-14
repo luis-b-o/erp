@@ -1,4 +1,6 @@
 import { convertPropsToObject } from '@/libs/utils/convert-props-to-object.util';
+import { Guard } from '@/libs/Guard';
+import { ArgumentNotProvidedException } from '@/libs/exceptions';
 
 /**
  * Defines the primitive types that can be used within a DomainPrimitive.
@@ -103,12 +105,12 @@ export abstract class ValueObject<T> {
    * @param props - The properties to check.
    */
   private checkIfEmpty(props: ValueObjectProps<T>): void {
-    // if (
-    //   Guard.isEmpty(props) ||
-    //   (this.isDomainPrimitive(props) && Guard.isEmpty(props.value))
-    // ) {
-    //   throw new ArgumentNotProvidedException('Property cannot be empty');
-    // }
+    if (
+      Guard.isEmpty(props) ||
+      (this.isDomainPrimitive(props) && Guard.isEmpty(props.value))
+    ) {
+      throw new ArgumentNotProvidedException('Property cannot be empty');
+    }
   }
 
   /**
