@@ -23,11 +23,7 @@ export class Guard {
         return true;
       }
     }
-    if (value === '') {
-      return true;
-    }
-
-    return false;
+    return value === '';
   }
 
   /**
@@ -47,9 +43,6 @@ export class Guard {
       typeof value === 'number'
         ? Number(value).toString().length
         : value.length;
-    if (valueLength >= min && valueLength <= max) {
-      return true;
-    }
-    return false;
+    return valueLength >= min && valueLength <= max;
   }
 }

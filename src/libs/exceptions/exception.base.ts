@@ -29,13 +29,13 @@ export abstract class ExceptionBase extends Error {
   public readonly correlationId: string;
 
   /**
-   * @param {string} message
-   * @param cause
-   * @param {ObjectLiteral} [metadata={}]
-   * **BE CAREFUL** not to include sensitive info in 'metadata'
-   * to prevent leaks since all exception's data will end up
-   * in application's log files. Only include non-sensitive
-   * info that may help with debugging.
+   * Constructs an instance of `ExceptionBase`, initializing it with a message, an optional cause, and optional metadata.
+   * This constructor also captures the stack trace to aid in debugging and assigns a correlation ID from the current
+   * request context to track the exception across different parts of the application or microservices.
+   *
+   * @param {string} message - The error message.
+   * @param {Error} [cause] - The original error instance that caused this exception, if any.
+   * @param {unknown} [metadata] - Additional data about the error that can be used for debugging.
    */
   constructor(
     readonly message: string,

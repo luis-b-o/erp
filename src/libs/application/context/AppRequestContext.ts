@@ -9,8 +9,7 @@ export class AppRequestContext extends RequestContext {
 
 export class RequestContextService {
   static getContext(): AppRequestContext {
-    const ctx: AppRequestContext = RequestContext.currentContext.req;
-    return ctx;
+    return RequestContext.currentContext.req;
   }
 
   static setRequestId(id: string): void {
