@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "debian-openssl-3.0.x"]
   previewFeatures = ["relationJoins", "omitApi"]
 }
 
@@ -16,25 +16,25 @@ datasource db {
 }
 
 model User {
-  id        Int     @default(autoincrement()) @id
+  id        String   @id @default(uuid())
   name      String
-  email     String  @unique
+  email     String   @unique
   password  String
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
 }
 
 model Product {
-  id            Int      @id @default(autoincrement())
-  name          String
-  description   String?
-  sku           String?
-  price         Int
-  stockAmount   Int? @map("stock_amount")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  sku         String?
+  price       Int
+  stockAmount Int?     @map("stock_amount")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("products")
 }
