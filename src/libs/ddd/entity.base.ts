@@ -46,7 +46,7 @@ export abstract class Entity<EntityProps> {
    *
    * @param {CreateEntityProps<EntityProps>} params - The creation parameters including ID, properties, and optional timestamps.
    */
-  protected constructor({
+  constructor({
     id,
     createdAt,
     updatedAt,

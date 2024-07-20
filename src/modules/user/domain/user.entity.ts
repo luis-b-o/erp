@@ -7,35 +7,23 @@ import { UserCreatedDomainEvent } from '@/modules/user/domain/events/user-create
 export class UserEntity extends AggregateRoot<UserProps> {
   protected readonly _id: AggregateID;
 
-  private password: string;
-
-  private constructor(
-    id: AggregateID,
-    props: UserProps & { password: string },
-  ) {
-    super({ id, props });
-    this.password = props.password;
-  }
-
   static create(create: CreateUserProps): UserEntity {
     const id = randomUUID();
     const email = new Email({ email: create.email });
 
     const props = {
       email,
-      group: 'basic',
       active: true,
       name: create.name,
       password: create.password,
     };
 
-    const user = new UserEntity(id, props);
+    const user = new UserEntity({ id, props });
 
     user.addEvent(
       new UserCreatedDomainEvent({
         aggregateId: id,
         name: props.name,
-        group: props.group,
         ...props.email.unpack(),
       }),
     );

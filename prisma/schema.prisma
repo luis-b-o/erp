@@ -1,13 +1,7 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider        = "prisma-client-js"
-  binaryTargets   = ["native", "debian-openssl-3.0.x"]
   previewFeatures = ["relationJoins", "omitApi"]
+  binaryTargets   = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -16,14 +10,40 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id           String            @id @default(uuid())
+  name         String
+  email        String            @unique
+  password     String
+  createdAt    DateTime          @default(now()) @map("created_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
+  active       Boolean           @default(true)
+  accessGroups UserAccessGroup[]
 
   @@map("users")
+}
+
+model AccessGroup {
+  id        String            @id @default(uuid())
+  name      String
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+  users     UserAccessGroup[]
+
+  @@map("access_groups")
+}
+
+model UserAccessGroup {
+  id            String      @id @default(uuid())
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  userId        String      @map("user_id")
+  accessGroupId String      @map("access_group_id")
+  accessGroup   AccessGroup @relation(fields: [accessGroupId], references: [id], map: "access_group_id")
+  user          User        @relation(fields: [userId], references: [id], map: "user_id")
+
+  @@index([accessGroupId], map: "access_group_id")
+  @@index([userId], map: "user_id")
+  @@map("user_groups")
 }
 
 model Product {

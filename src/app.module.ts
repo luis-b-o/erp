@@ -7,6 +7,20 @@ import { AuthService } from '@/services/auth.service';
 import { RequestContextModule } from 'nestjs-request-context';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UserModule } from '@/modules/user/user.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ContextInterceptor } from '@/libs/application/interceptors/context.interceptor';
+import { ExceptionInterceptor } from '@/libs/application/interceptors/exception.interceptor';
+
+const interceptors = [
+  {
+    provide: APP_INTERCEPTOR,
+    useClass: ContextInterceptor,
+  },
+  {
+    provide: APP_INTERCEPTOR,
+    useClass: ExceptionInterceptor,
+  },
+];
 
 @Module({
   imports: [
@@ -17,6 +31,6 @@ import { UserModule } from '@/modules/user/user.module';
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [UserService, AuthService, PrismaService],
+  providers: [UserService, AuthService, PrismaService, ...interceptors],
 })
 export class AppModule {}
