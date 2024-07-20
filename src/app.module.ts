@@ -10,6 +10,7 @@ import { UserModule } from '@/modules/user/user.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ContextInterceptor } from '@/libs/application/interceptors/context.interceptor';
 import { ExceptionInterceptor } from '@/libs/application/interceptors/exception.interceptor';
+import { CqrsModule } from '@nestjs/cqrs';
 
 const interceptors = [
   {
@@ -27,6 +28,7 @@ const interceptors = [
     EventEmitterModule.forRoot(),
     ConfigModule.forRoot(),
     RequestContextModule,
+    CqrsModule,
 
     UserModule,
   ],

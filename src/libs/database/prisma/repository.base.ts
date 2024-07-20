@@ -9,6 +9,8 @@ import { ObjectLiteral } from '@/libs/types/object-literal';
 import { RequestContextService } from '@/libs/application/context/AppRequestContext';
 import { type PrismaClient } from '@prisma/client/extension';
 import { PrismaService } from '@/services/prisma.service';
+import { ConflictException } from '@/libs/exceptions';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export class PrismaRepositoryBase<
   Aggregate extends AggregateRoot<any>,
@@ -30,14 +32,25 @@ export class PrismaRepositoryBase<
       `[${RequestContextService.getRequestId()}] saving ${this.modelClient.name}: ${entity.id}`,
     );
 
-    const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
-    await wait(3000);
+    try {
+      await this.modelClient.create({
+        data: model,
+      });
 
-    await this.modelClient.create({
-      data: model,
-    });
-    throw new Error();
-    return await entity.publishEvents(this.logger, this.eventEmitter);
+      return await entity.publishEvents(this.logger, this.eventEmitter);
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        this.logger.debug(
+          `[${RequestContextService.getRequestId()}] ${error.message}`,
+        );
+
+        if (error.code === 'P2002') {
+          throw new ConflictException('Record already exists', error);
+        }
+      }
+
+      throw error;
+    }
   }
 
   async transaction<T>(handler: () => Promise<T>): Promise<T> {
